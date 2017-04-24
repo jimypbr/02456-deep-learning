@@ -49,13 +49,13 @@ def get_batch(batch_size=100, min_digits = 3, max_digits=3):
         text_target_out = text_target + stop_character
 
         #generate the targets as a list of intergers
-        int_target_in = map(lambda c: valid_characters.index(c), text_target_in)
-        int_target_out = map(lambda c: valid_characters.index(c), text_target_out)
+        int_target_in = list(map(lambda c: valid_characters.index(c), text_target_in))
+        int_target_out = list(map(lambda c: valid_characters.index(c), text_target_out))
 
         #generate the text input
-        text_input = " ".join(map(lambda k: target_to_text[k], inp_str))
+        text_input = " ".join(list(map(lambda k: target_to_text[k], inp_str)))
         #generate the inputs as a list of intergers
-        int_input = map(lambda c: valid_characters.index(c), text_input)
+        int_input = list(map(lambda c: valid_characters.index(c), text_input))
 
         text_inputs.append(text_input)
         int_inputs.append(int_input)
@@ -65,24 +65,24 @@ def get_batch(batch_size=100, min_digits = 3, max_digits=3):
         int_targets_out.append(int_target_out)
 
     #create the input matrix, mask and seq_len - note that we zero pad the shorter sequences.
-    max_input_len = max(map(len, int_inputs))
+    max_input_len = max(list(map(len, int_inputs)))
     inputs = np.zeros((batch_size, max_input_len))
 #    input_masks = np.zeros((batch_size,max_input_len))
     for (i,inp) in enumerate(int_inputs):
         cur_len = len(inp)
         inputs[i,:cur_len] = inp
 #        input_masks[i,:cur_len] = 1
-    inputs_seqlen = np.asarray(map(len, int_inputs))
+    inputs_seqlen = np.asarray(list(map(len, int_inputs)))
 
-    max_target_in_len = max(map(len, int_targets_in))
+    max_target_in_len = max(list(map(len, int_targets_in)))
     targets_in = np.zeros((batch_size, max_target_in_len))
     targets_mask = np.zeros((batch_size, max_target_in_len))
     for (i, tar) in enumerate(int_targets_in):
         cur_len = len(tar)
         targets_in[i, :cur_len] = tar
-    targets_seqlen = np.asarray(map(len, int_targets_in))
+    targets_seqlen = np.asarray(list(map(len, int_targets_in)))
 
-    max_target_out_len = max(map(len, int_targets_out))
+    max_target_out_len = max(list(map(len, int_targets_out)))
     targets_out = np.zeros((batch_size, max_target_in_len))
     for (i,tar) in enumerate(int_targets_out):
         cur_len = len(tar)
